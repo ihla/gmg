@@ -29,11 +29,11 @@
         <!-- ** You need to replace the key below with your own key. **
 	         See: https://developers.google.com/maps/documentation/android/start
 	         for instructions on how to get your own key. 
-	         MAC: xxx
+	         MAC: AIzaSyB2QkHxAF53o2GNfOtSLV0NmO386VZRRR0
 	         PC: AIzaSyBM94523U4rJZKCTb5_LfpT_Yi6vSYtRN4
 	         -->
 	    <meta-data android:name="com.google.android.maps.v2.API_KEY"
-	    android:value="AIzaSyBM94523U4rJZKCTb5_LfpT_Yi6vSYtRN4"/>
+	    android:value="AIzaSyB2QkHxAF53o2GNfOtSLV0NmO386VZRRR0"/>
         
         
         <activity
