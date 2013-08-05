@@ -5,14 +5,41 @@
     android:versionName="1.0" >
 
     <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="17" />
+    
+    <!-- Tell the system this app requires OpenGL ES 2.0. -->
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <permission
+	   android:name="co.joyatwork.grid.MAPS_RECEIVE"
+	   android:protectionLevel="signature"/>
+	<uses-permission android:name="co.joyatwork.grid.permission.MAPS_RECEIVE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+	<uses-permission android:name="android.permission.INTERNET"/>
+	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+	<!-- External storage for caching. -->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<!-- My Location -->
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
+        
+        <!-- ** You need to replace the key below with your own key. **
+	         See: https://developers.google.com/maps/documentation/android/start
+	         for instructions on how to get your own key. 
+	         MAC: xxx
+	         PC: AIzaSyBM94523U4rJZKCTb5_LfpT_Yi6vSYtRN4
+	         -->
+	    <meta-data android:name="com.google.android.maps.v2.API_KEY"
+	    android:value="AIzaSyBM94523U4rJZKCTb5_LfpT_Yi6vSYtRN4"/>
+        
+        
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:screenOrientation="landscape"
+            android:screenOrientation="portrait"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
