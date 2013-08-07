@@ -33,7 +33,7 @@ public class MainActivity extends AndroidApplication {
         cfg.g = 8;
         cfg.b = 8;
         cfg.a = 8;
-        cfg.useGL20 = false;
+        cfg.useGL20 = true;
         
         initialize(new GridGame(), cfg);
 

@@ -2,6 +2,7 @@ package co.joyatwork.grid;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -11,10 +12,14 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.lights.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.lights.Lights;
+import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
 import com.badlogic.gdx.graphics.g3d.materials.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.materials.Material;
+import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
+import com.badlogic.gdx.utils.JsonReader;
 
 public class GridGame implements ApplicationListener {
 	private PerspectiveCamera cam;
@@ -34,11 +39,15 @@ public class GridGame implements ApplicationListener {
         cam.near = 1f; //  distance to near clipping plane
         cam.far = 100f; // distance to far clipping plane
         cam.update();
-        
+        /*
         ModelBuilder modelBuilder = new ModelBuilder();
         model = modelBuilder.createBox(1f, 1f, 1f, 
             new Material(ColorAttribute.createDiffuse(Color.GREEN)),
             Usage.Position | Usage.Normal);
+		*/
+        ModelLoader modelLoader = new G3dModelLoader(new JsonReader());
+        ModelData modelData = modelLoader.loadModelData(Gdx.files.internal("data/TEST2.g3dj"));
+        model = new Model(modelData, new TextureProvider.FileTextureProvider());
 
         instance = new ModelInstance(model, 0f, 0f, 0f);
         
