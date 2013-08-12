@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g3d.materials.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.materials.Material;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
 import com.badlogic.gdx.utils.JsonReader;
@@ -51,7 +52,7 @@ public class GridGame implements ApplicationListener {
 
         instance = new ModelInstance(model, 0f, 0f, 0f);
         
-        modelBatch = new ModelBatch();
+        modelBatch = new ModelBatch(new DefaultShaderProvider());
         
         lights = new Lights();
         lights.ambientLight.set(0.4f, 0.4f, 0.4f, 1f);
