@@ -43,7 +43,14 @@ public class MainActivity extends AndroidApplication {
             glView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
             // Have to do this or else GlSurfaceView wont be transparent
             glView.setZOrderOnTop(true);
-            addMapToView(glView, savedInstanceState);
+            
+            mapView = new MapView(this);
+            setContentView(mapView);
+            mapView.onCreate(savedInstanceState);
+            mapView.addView(glView, 
+            		new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.MATCH_PARENT ));
+            setUpMapIfNeeded();
+
             }
         else {
             Gdx.app.error(TAG, "failed to add SurfaceView on the top of MapView");
@@ -82,15 +89,6 @@ public class MainActivity extends AndroidApplication {
         mapView.onSaveInstanceState(outState);
     }
 
-	private void addMapToView(SurfaceView glView, Bundle savedInstanceState) {
-        mapView = new MapView(this);
-        setContentView(mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.addView(glView, 
-        		new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.MATCH_PARENT ));
-        setUpMapIfNeeded();
-	}
-	
     private void setUpMapIfNeeded() {
         if (map == null) {
             map = mapView.getMap();
