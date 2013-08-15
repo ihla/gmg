@@ -4,7 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -40,16 +40,17 @@ public class GridGame implements ApplicationListener {
         cam.near = 1f; //  distance to near clipping plane
         cam.far = 100f; // distance to far clipping plane
         cam.update();
-        /*
+        
         ModelBuilder modelBuilder = new ModelBuilder();
         model = modelBuilder.createBox(1f, 1f, 1f, 
             new Material(ColorAttribute.createDiffuse(Color.GREEN)),
             Usage.Position | Usage.Normal);
-		*/
+        /*
         ModelLoader modelLoader = new G3dModelLoader(new JsonReader());
         ModelData modelData = modelLoader.loadModelData(Gdx.files.internal("data/TEST2.g3dj"));
         model = new Model(modelData, new TextureProvider.FileTextureProvider());
-
+        */
+        
         instance = new ModelInstance(model, 0f, 0f, 0f);
         
         modelBatch = new ModelBatch(new DefaultShaderProvider());
@@ -75,7 +76,7 @@ public class GridGame implements ApplicationListener {
 		camController.update();
 
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
  
         modelBatch.begin(cam);
         modelBatch.render(instance, lights);
