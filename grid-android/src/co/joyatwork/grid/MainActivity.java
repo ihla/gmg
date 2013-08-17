@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 
+import com.android.debug.hv.ViewServer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -39,29 +40,36 @@ public class MainActivity extends AndroidApplication {
 
         if (graphics.getView() instanceof SurfaceView) {
             SurfaceView glView = (SurfaceView) graphics.getView();
-            // force alpha channel
+            // set transparent view
             glView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
-            // Have to do this or else GlSurfaceView wont be transparent
+            // put on the top of current window
             glView.setZOrderOnTop(true);
             
+            //set mapView as the content view
+            //set glView above mapView
             mapView = new MapView(this);
-            setContentView(mapView);
             mapView.onCreate(savedInstanceState);
-            mapView.addView(glView, 
+            addContentView(mapView, 
             		new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.MATCH_PARENT ));
+            glView.getParent().bringChildToFront(glView);
+            
             setUpMapIfNeeded();
-
             }
         else {
-            Gdx.app.error(TAG, "failed to add SurfaceView on the top of MapView");
+            Gdx.app.error(TAG, "failed to add GLSurfaceView on the top of MapView");
 		}
-
+        
+        //support for Hierarchy Viewer
+        //TODO remember to disable ViewServer for production release!
+        ViewServer.get(this).addWindow(this);
     }
 
     
     @Override
     protected void onResume() {
         mapView.onResume();
+        //TODO remember to disable ViewServer for production release!
+        ViewServer.get(this).setFocusedWindow(this);
         super.onResume();
     }
 
@@ -74,6 +82,8 @@ public class MainActivity extends AndroidApplication {
     @Override
     protected void onDestroy() {
         mapView.onDestroy();
+        //TODO remember to disable ViewServer for production release!
+        ViewServer.get(this).removeWindow(this);
         super.onDestroy();
     }
 
