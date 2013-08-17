@@ -40,16 +40,17 @@ public class GridGame implements ApplicationListener {
         cam.near = 1f; //  distance to near clipping plane
         cam.far = 100f; // distance to far clipping plane
         cam.update();
-        
+        /*
         ModelBuilder modelBuilder = new ModelBuilder();
         model = modelBuilder.createBox(1f, 1f, 1f, 
             new Material(ColorAttribute.createDiffuse(Color.GREEN)),
             Usage.Position | Usage.Normal);
-        /*
-        ModelLoader modelLoader = new G3dModelLoader(new JsonReader());
-        ModelData modelData = modelLoader.loadModelData(Gdx.files.internal("data/TEST2.g3dj"));
-        model = new Model(modelData, new TextureProvider.FileTextureProvider());
         */
+        /* */
+        ModelLoader modelLoader = new G3dModelLoader(new JsonReader());
+        ModelData modelData = modelLoader.loadModelData(Gdx.files.internal("data/texture_test_object.g3dj"));
+        model = new Model(modelData, new TextureProvider.FileTextureProvider());
+       
         
         instance = new ModelInstance(model, 0f, 0f, 0f);
         
