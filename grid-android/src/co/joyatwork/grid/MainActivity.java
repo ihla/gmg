@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 
+import co.joyatwork.grid.tests.BasicShaderTest;
+
 import com.android.debug.hv.ViewServer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -36,7 +38,9 @@ public class MainActivity extends AndroidApplication {
         cfg.a = 8;
         cfg.useGL20 = true;
         
+        //TODO remove shader testing 
         initialize(new GridGame(), cfg);
+        //initialize(new BasicShaderTest(), cfg);
 
         if (graphics.getView() instanceof SurfaceView) {
             SurfaceView glView = (SurfaceView) graphics.getView();
