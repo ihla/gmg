@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 
+import co.joyatwork.grid.tests.CustomShaderTest;
 import co.joyatwork.grid.tests.DefaultShaderTest;
 
 import com.android.debug.hv.ViewServer;
@@ -40,7 +41,9 @@ public class MainActivity extends AndroidApplication {
         
         //TODO remove shader testing 
         //initialize(new GridGame(), cfg);
-        initialize(new DefaultShaderTest(), cfg);
+
+        //initialize(new DefaultShaderTest(), cfg);
+        initialize(new CustomShaderTest(), cfg);
 
         if (graphics.getView() instanceof SurfaceView) {
             SurfaceView glView = (SurfaceView) graphics.getView();
