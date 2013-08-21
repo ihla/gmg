@@ -47,6 +47,7 @@ public class MainActivity extends AndroidApplication {
             // set transparent view
             glView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
             // put on the top of current window
+            //TODO I am not sure if this is needed???
             glView.setZOrderOnTop(true);
             
             //set mapView as the content view
