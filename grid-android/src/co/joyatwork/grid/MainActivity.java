@@ -40,10 +40,10 @@ public class MainActivity extends AndroidApplication {
         cfg.useGL20 = true;
         
         //TODO remove shader testing 
-        //initialize(new GridGame(), cfg);
+        initialize(new GridGame(), cfg);
 
         //initialize(new DefaultShaderTest(), cfg);
-        initialize(new CustomShaderTest(), cfg);
+        //initialize(new CustomShaderTest(), cfg);
 
         if (graphics.getView() instanceof SurfaceView) {
             SurfaceView glView = (SurfaceView) graphics.getView();

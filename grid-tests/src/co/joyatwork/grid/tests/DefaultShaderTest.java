@@ -58,12 +58,12 @@ public class DefaultShaderTest implements ApplicationListener {
         
         renderable = new Renderable();
         blockPart.setRenderable(renderable);
-        renderable.lights = null;
+        renderable.lights = lights; //TODO if null, NULL POINTER EXCEPTION in DefaultShader
         renderable.worldTransform.idt();
         //renderable.primitiveType = GL20.GL_POINTS;
           
         renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-        shader = new DefaultShader(renderable, false, false, 1, 0, 0, 0);
+        shader = new DefaultShader(renderable, true, false, false, false, 0, 0, 0, 0);
         shader.init();
     }
      

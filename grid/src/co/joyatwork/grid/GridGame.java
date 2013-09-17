@@ -68,26 +68,28 @@ public class GridGame implements ApplicationListener {
         cam.near = 1f; //  distance to near clipping plane
         cam.far = 100f; // distance to far clipping plane
         cam.update();
-        /**/
+        /*
         ModelBuilder modelBuilder = new ModelBuilder();
         model = modelBuilder.createBox(1f, 1f, 1f, 
             new Material(ColorAttribute.createDiffuse(Color.GREEN)),
             Usage.Position | Usage.Normal);
-        
-        /*
+        */
+        /**/
         ModelLoader modelLoader = new G3dModelLoader(new JsonReader());
         ModelData modelData = modelLoader.loadModelData(Gdx.files.internal("data/texture_test_object.g3dj"));
         model = new Model(modelData, new TextureProvider.FileTextureProvider());
-        */
+        
         lights = new Lights();
         lights.ambientLight.set(0.4f, 0.4f, 0.4f, 1f);
         lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
         lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, 1f, 0.8f, 0.2f));
 
-        /*
+        /**/
         instance = new ModelInstance(model, 0f, 0f, 0f);
-        modelBatch = new ModelBatch(new DefaultShaderProvider());
-        */
+        //modelBatch = new ModelBatch(new DefaultShaderProvider());
+        modelBatch = new ModelBatch();
+        
+        /*
         NodePart blockPart = model.nodes.get(0).parts.get(0);
         
         renderable = new Renderable();
@@ -96,9 +98,10 @@ public class GridGame implements ApplicationListener {
         renderable.worldTransform.idt();
           
         renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-        shader = new DefaultShader(vert, frag, renderable, true, false, 2, 0, 0, 0);
+        shader = new DefaultShader(vert, frag, renderable, true, false, false, false, 2, 0, 0, 0);
         shader.init();
-
+		*/
+        
         camController = new CameraInputController(cam);
         Gdx.input.setInputProcessor(camController);
 
@@ -108,7 +111,7 @@ public class GridGame implements ApplicationListener {
 	public void dispose() {
 		modelBatch.dispose();
 		model.dispose();
-        shader.dispose();
+        //shader.dispose();
 
 	}
 
@@ -118,17 +121,17 @@ public class GridGame implements ApplicationListener {
 
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        /*
+        /**/
         modelBatch.begin(cam);
         modelBatch.render(instance, lights);
         modelBatch.end();
-        */
+        /*
         renderContext.begin();
         shader.begin(cam, renderContext);
         shader.render(renderable);
         shader.end();
         renderContext.end();
-
+		*/
 	}
 
 	@Override

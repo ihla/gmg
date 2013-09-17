@@ -69,7 +69,7 @@ public class CustomShaderTest implements ApplicationListener {
         renderable.worldTransform.idt();
           
         renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-        shader = new DefaultShader(vert, frag, renderable, false, false, 1, 0, 0, 0);
+        shader = new DefaultShader(vert, frag, renderable, false, false, false, false, 1, 0, 0, 0);
         shader.init();
     }
      
