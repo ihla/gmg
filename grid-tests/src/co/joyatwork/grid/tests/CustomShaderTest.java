@@ -25,25 +25,6 @@ public class CustomShaderTest implements ApplicationListener {
     public Model model;
     public Renderable renderable;
 
-    private final String vert =
-	"attribute vec3 a_position;" +
-	"attribute vec3 a_normal;" +
-	"attribute vec2 a_texCoord0;" +
-	"uniform mat4 u_worldTrans;" +
-	"uniform mat4 u_projTrans;" +
-	"varying vec2 v_texCoord0;" +
-	"void main() {" +
-	"    v_texCoord0 = a_texCoord0;" +
-	"    gl_Position = u_projTrans * u_worldTrans * vec4(a_position, 1.0);" +
-	"}";
-    
-    String frag =
-	"precision mediump float;" +
-	"varying vec2 v_texCoord0;" +
-	"void main() {" +
-	"    gl_FragColor = vec4(v_texCoord0, 0.0, 1.0);" +
-	"}";
-
     @Override
     public void create () {
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -69,7 +50,7 @@ public class CustomShaderTest implements ApplicationListener {
         renderable.worldTransform.idt();
           
         renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-        shader = new DefaultShader(vert, frag, renderable, false, false, false, false, 1, 0, 0, 0);
+        shader = new CustomShader();
         shader.init();
     }
      
