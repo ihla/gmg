@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.lights.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.lights.Lights;
 import com.badlogic.gdx.graphics.g3d.materials.Material;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader;
@@ -17,13 +19,14 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 
 
-public class CustomShaderTest implements ApplicationListener {
-    public PerspectiveCamera cam;
-    public CameraInputController camController;
-    public Shader shader;
-    public RenderContext renderContext;
-    public Model model;
-    public Renderable renderable;
+public class DiffuseShaderTest implements ApplicationListener {
+    private PerspectiveCamera cam;
+    private CameraInputController camController;
+    private Shader shader;
+    private RenderContext renderContext;
+    private Model model;
+    private Renderable renderable;
+	private Lights lights;
 
     @Override
     public void create () {
@@ -42,15 +45,19 @@ public class CustomShaderTest implements ApplicationListener {
           new Material(),
           Usage.Position | Usage.Normal | Usage.TextureCoordinates);
      
+        lights = new Lights();
+        lights.ambientLight.set(0.2f, 0.2f, 0.2f, 1f);
+        lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
+
         NodePart blockPart = model.nodes.get(0).parts.get(0);
           
         renderable = new Renderable();
         blockPart.setRenderable(renderable);
-        renderable.lights = null;
+        renderable.lights = lights;
         renderable.worldTransform.idt();
           
         renderContext = new RenderContext(new DefaultTextureBinder(DefaultTextureBinder.WEIGHTED, 1));
-        shader = new CustomShader();
+        shader = new DiffuseShader();
         shader.init();
     }
      
@@ -59,8 +66,7 @@ public class CustomShaderTest implements ApplicationListener {
         camController.update();
          
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        //Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
  
         renderContext.begin();
         shader.begin(cam, renderContext);
