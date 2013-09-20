@@ -43,6 +43,7 @@ public class MainActivity extends AndroidApplication {
         //initialize(new GridGame(), cfg);
         //initialize(new DefaultShaderTest(), cfg);
         initialize(new DiffuseShaderTest(), cfg);
+        //initialize(new DiffuseTextureShaderTest(), cfg);
 
         if (graphics.getView() instanceof SurfaceView) {
             SurfaceView glView = (SurfaceView) graphics.getView();

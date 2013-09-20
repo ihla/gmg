@@ -11,49 +11,58 @@ import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
- * DiffuseShader implements vertex & fragment shader.
- * It calculates diffuse color with ambient and directional lighting.
+ * DiffuseTextureShader implements vertex & fragment shader.
+ * It calculates diffuse color with texture, ambient and directional lighting.
  * <p>
  * WARNING: only one directional light supported in this version!!!
  */
-public class DiffuseShader extends BaseShader {
+public class DiffuseTextureShader extends BaseShader {
 
-	//TODO calculate u_projTrans * u_worldTrans in CPU???
 	private final static String vertexShader = 
 			"attribute vec3 a_position;\n"+
 			"attribute vec3 a_normal;\n"+
+			"attribute vec2 a_texCoord0;\n"+
 			"uniform mat4 u_projTrans;\n"+
 			"uniform mat4 u_worldTrans;\n"+
 			"uniform mat3 u_normalMatrix;\n"+
+			"uniform vec3 u_color;\n"+
 			"uniform vec3 u_dirLightColor;\n"+
 			"uniform vec3 u_dirLightDirection;\n"+
+			"varying vec3 v_diffuseColor;\n"+
 			"varying vec3 v_diffuseLight;\n"+
+			"varying vec2 v_texCoords0;\n"+
 			"void main() {\n"+
 			"	vec3 normal;\n"+
 			"	normal = normalize(u_normalMatrix * a_normal);\n"+
 			"	float NdotL = clamp(dot(normal, -u_dirLightDirection), 0.0, 1.0);\n"+
 			"	v_diffuseLight = u_dirLightColor * NdotL;\n"+
+			"	v_diffuseColor = u_color;\n"+
+			"	v_texCoords0 = a_texCoord0;\n"+
 			"	gl_Position = u_projTrans * u_worldTrans * vec4(a_position, 1.0);\n"+
 			"}\n";
 	
 	/*
-	 * u_diffuseColor - diffuse material color;
-	 * u_ambientLight - ambient light color;
-	 * v_diffuseLight - diffuse light color intensity = dot(normal, lightDirection) * directionLightColor; 
+	 * v_diffuseColor - diffuse material color;
+	 * v_ambientLight - ambient light color;
+	 * v_diffuseLight - diffuse light color intensity = dot(normal, lightDierction) * directionLightColor; 
 	 */
 	private final static String fragmentShader = 
+			"varying vec3 v_diffuseColor;\n"+
 			"varying vec3 v_diffuseLight;\n"+
+			"varying mediump vec2 v_texCoords0;\n"+
 			"uniform vec3 u_ambientLight;\n"+
-			"uniform vec3 u_diffuseColor;\n"+
+			"uniform sampler2D u_diffuseTexture;\n"+
+			"uniform vec4 u_diffuseColor;\n"+
 			"void main() {\n" +
-			"	gl_FragColor.rgb = u_diffuseColor * (u_ambientLight + v_diffuseLight);\n" +
+			"	vec4 diffuse = texture2D(u_diffuseTexture, v_texCoords0) * u_diffuseColor;\n"+
+			"	gl_FragColor.rgb = v_diffuseColor * (u_ambientLight + v_diffuseLight);\n" +
 			"	gl_FragColor.a = 1.0;\n" +
 			"}\n";
 	
 	//TODO why protected????
 	protected final int u_projTrans	= register(new Uniform("u_projTrans"));
 	protected final int u_worldTrans = register(new Uniform("u_worldTrans"));
-	protected final int u_diffuseColor = register(new Uniform("u_diffuseColor"));
+	protected final int u_color = register(new Uniform("u_color"));
 	protected final int u_normalMatrix = register(new Uniform("u_normalMatrix"));
 	protected final int u_dirLightColor = register(new Uniform("u_dirLightColor"));
 	protected final int u_dirLightDirection = register(new Uniform("u_dirLightDirection"));
@@ -62,7 +71,7 @@ public class DiffuseShader extends BaseShader {
 	protected final ShaderProgram program;
 	private final Matrix3 normalMatrix = new Matrix3();
 	
-	public DiffuseShader () {
+	public DiffuseTextureShader () {
 		super();
 		program = new ShaderProgram(vertexShader, fragmentShader);
 		if (!program.isCompiled())
@@ -78,7 +87,7 @@ public class DiffuseShader extends BaseShader {
 	public void begin (Camera camera, RenderContext context) {
 		program.begin();
 		set(u_projTrans, camera.combined);
-		set(u_diffuseColor, 0f, 1f, 0f);
+		set(u_color, 0f, 1f, 0f);
 		context.setDepthTest(GL20.GL_LEQUAL);
         context.setCullFace(GL20.GL_BACK);
 	}
