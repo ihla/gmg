@@ -5,19 +5,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.lights.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.lights.Lights;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
-import com.badlogic.gdx.graphics.g3d.materials.Material;
 import com.badlogic.gdx.graphics.g3d.model.NodePart;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelData;
+import com.badlogic.gdx.graphics.g3d.utils.BaseShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultTextureBinder;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.g3d.utils.TextureProvider;
 import com.badlogic.gdx.utils.JsonReader;
@@ -31,10 +31,19 @@ public class DiffuseTextureShaderTest implements ApplicationListener {
     private Model model;
     private Renderable renderable;
 	private Lights lights;
+	private ModelBatch modelBatch;
+	private ModelInstance instance;
 
     @Override
     public void create () {
-        cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		modelBatch = new ModelBatch(new BaseShaderProvider() {
+			@Override
+			protected Shader createShader (Renderable renderable) {
+				return new DiffuseTextureShader();
+			}
+		});
+
+    	cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(3f, 3f, 3f);
         cam.lookAt(0,0,0);
         cam.near = 0.1f;
@@ -59,6 +68,7 @@ public class DiffuseTextureShaderTest implements ApplicationListener {
         lights.ambientLight.set(0.2f, 0.2f, 0.2f, 1f);
         lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
 
+        instance = new ModelInstance(model);
         //NodePart blockPart = model.nodes.get(0).parts.get(0);
         NodePart blockPart = model.nodes.get(0).children.get(0).parts.get(0);
           
@@ -78,17 +88,23 @@ public class DiffuseTextureShaderTest implements ApplicationListener {
          
         Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
- 
+        /*
         renderContext.begin();
         shader.begin(cam, renderContext);
         shader.render(renderable);
         shader.end();
         renderContext.end();
+        */
+		modelBatch.begin(cam);
+		modelBatch.render(instance, lights);
+		modelBatch.end();
+
     }
      
     @Override
     public void dispose () {
-        shader.dispose();
+    	modelBatch.dispose();
+    	shader.dispose();
         model.dispose();
     }
 
