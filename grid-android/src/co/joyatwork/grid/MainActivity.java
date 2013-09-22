@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import co.joyatwork.grid.tests.DiffuseShaderTest;
 import co.joyatwork.grid.tests.DefaultShaderTest;
+import co.joyatwork.grid.tests.DiffuseTextureShaderTest;
 
 import com.android.debug.hv.ViewServer;
 import com.badlogic.gdx.Gdx;
@@ -42,8 +43,8 @@ public class MainActivity extends AndroidApplication {
         //TODO remove shader testing 
         //initialize(new GridGame(), cfg);
         //initialize(new DefaultShaderTest(), cfg);
-        initialize(new DiffuseShaderTest(), cfg);
-        //initialize(new DiffuseTextureShaderTest(), cfg);
+        //initialize(new DiffuseShaderTest(), cfg);
+        initialize(new DiffuseTextureShaderTest(), cfg);
 
         if (graphics.getView() instanceof SurfaceView) {
             SurfaceView glView = (SurfaceView) graphics.getView();
