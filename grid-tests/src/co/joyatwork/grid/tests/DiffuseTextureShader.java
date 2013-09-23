@@ -1,9 +1,11 @@
 package co.joyatwork.grid.tests;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.materials.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -47,15 +49,16 @@ public class DiffuseTextureShader extends BaseShader {
 	 * v_diffuseLight - diffuse light color intensity = dot(normal, lightDierction) * directionLightColor; 
 	 */
 	private final static String fragmentShader = 
+			"precision mediump float;\n"+
 			"varying vec3 v_diffuseColor;\n"+
 			"varying vec3 v_diffuseLight;\n"+
-			"varying mediump vec2 v_texCoords0;\n"+
+			"varying vec2 v_texCoords0;\n"+
 			"uniform vec3 u_ambientLight;\n"+
 			"uniform sampler2D u_diffuseTexture;\n"+
 			"uniform vec4 u_diffuseColor;\n"+
 			"void main() {\n" +
-			"	vec4 diffuse = texture2D(u_diffuseTexture, v_texCoords0) * u_diffuseColor;\n"+
-			"	gl_FragColor.rgb = v_diffuseColor * (u_ambientLight + v_diffuseLight);\n" +
+			"	vec4 diffuseColor = texture2D(u_diffuseTexture, v_texCoords0) * u_diffuseColor;\n"+
+			"	gl_FragColor.rgb = diffuseColor.rgb * (u_ambientLight + v_diffuseLight);\n" +
 			"	gl_FragColor.a = 1.0;\n" +
 			"}\n";
 	
@@ -67,9 +70,12 @@ public class DiffuseTextureShader extends BaseShader {
 	protected final int u_dirLightColor = register(new Uniform("u_dirLightColor"));
 	protected final int u_dirLightDirection = register(new Uniform("u_dirLightDirection"));
 	protected final int u_ambientLight = register(new Uniform("u_ambientLight"));
+	protected final int u_diffuseTexture = register(new Uniform("u_diffuseTexture"));
+	protected final int u_diffuseColor = register(new Uniform("u_diffuseColor"));
 	
 	protected final ShaderProgram program;
 	private final Matrix3 normalMatrix = new Matrix3();
+	private RenderContext context;
 	
 	public DiffuseTextureShader () {
 		super();
@@ -86,6 +92,7 @@ public class DiffuseTextureShader extends BaseShader {
 	@Override
 	public void begin (Camera camera, RenderContext context) {
 		program.begin();
+		this.context = context;
 		set(u_projTrans, camera.combined);
 		set(u_color, 0f, 1f, 0f);
 		context.setDepthTest(GL20.GL_LEQUAL);
@@ -98,6 +105,7 @@ public class DiffuseTextureShader extends BaseShader {
 		set(u_worldTrans, renderable.worldTransform);
 		set(u_normalMatrix, normalMatrix.set(renderable.worldTransform).inv().transpose());
 		
+		//TODO optimize these checks for best performance!
 		//TODO what if dir light is not set and/or more lights are set???
 		if (renderable.lights == null || renderable.lights.directionalLights == null || (renderable.lights.directionalLights.size == 0)) {
 			set(u_dirLightColor, 0f, 0f, 0f);
@@ -118,6 +126,14 @@ public class DiffuseTextureShader extends BaseShader {
 				renderable.lights.ambientLight.r,
 				renderable.lights.ambientLight.g,
 				renderable.lights.ambientLight.b);
+		}
+		if (renderable.material.get(TextureAttribute.Diffuse) != null) {
+			final int unit = this.context.textureBinder.bind(((TextureAttribute)(renderable.material.get(TextureAttribute.Diffuse))).textureDescription);
+			set(u_diffuseTexture, unit);
+			set(u_diffuseColor, 1f, 1f, 1f, 1f);
+		}
+		else {
+			Gdx.app.log(".", "");
 		}
 			
 		renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
