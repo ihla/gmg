@@ -33,12 +33,16 @@ public class Basic3DSceneTest implements ApplicationListener {
 
 	@Override
 	public void create() {
+		/*
+		modelBatch = new ModelBatch();
+		*/
 		modelBatch = new ModelBatch(new BaseShaderProvider() {
 			@Override
 			protected Shader createShader (Renderable renderable) {
 				return new DiffuseTextureShader();
 			}
 		});
+		
 		lights = new Lights();
 		lights.ambientLight.set(0.4f, 0.4f, 0.4f, 1f);
 		lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
@@ -86,10 +90,12 @@ public class Basic3DSceneTest implements ApplicationListener {
 			
 			if (id.equals("ship"))
 				ship = instance;
-			else if (id.startsWith("block"))
+			else if (id.contains("block")) {
 				blocks.add(instance);
-			else if (id.startsWith("invader"))
+			}
+			else if (id.contains("invader")) {
 				invaders.add(instance);
+			}
 		}
 
 		loading = false;
@@ -105,8 +111,10 @@ public class Basic3DSceneTest implements ApplicationListener {
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
 		modelBatch.begin(cam);
-		for (ModelInstance instance : instances)
-			modelBatch.render(instance, lights);
+		//for (ModelInstance instance : instances)
+			//modelBatch.render(instance, lights);
+		if (blocks.size > 2)
+			modelBatch.render(blocks.get(2), lights);
 		//if (space != null)
 			//modelBatch.render(space);
 		modelBatch.end();

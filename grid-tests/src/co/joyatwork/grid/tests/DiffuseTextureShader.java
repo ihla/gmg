@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.materials.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.materials.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.BaseShader;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
@@ -130,11 +131,13 @@ public class DiffuseTextureShader extends BaseShader {
 		if (renderable.material.get(TextureAttribute.Diffuse) != null) {
 			final int unit = this.context.textureBinder.bind(((TextureAttribute)(renderable.material.get(TextureAttribute.Diffuse))).textureDescription);
 			set(u_diffuseTexture, unit);
-			set(u_diffuseColor, 1f, 1f, 1f, 1f);
 		}
 		else {
 			Gdx.app.log(".", "");
 		}
+		//if (renderable.material.get(ColorAttribute.Diffuse) != null)
+		//set(u_diffuseColor, ((ColorAttribute)renderable.material.get(ColorAttribute.Diffuse)).color);
+		set(u_diffuseColor, 0f, 0f, 1f, 1f);
 			
 		renderable.mesh.render(program, renderable.primitiveType, renderable.meshPartOffset, renderable.meshPartSize);
 	}
