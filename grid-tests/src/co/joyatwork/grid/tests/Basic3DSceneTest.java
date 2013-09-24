@@ -8,9 +8,12 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.lights.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.lights.Lights;
 import com.badlogic.gdx.graphics.g3d.model.Node;
+import com.badlogic.gdx.graphics.g3d.utils.BaseShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.utils.Array;
 
@@ -30,7 +33,12 @@ public class Basic3DSceneTest implements ApplicationListener {
 
 	@Override
 	public void create() {
-		modelBatch = new ModelBatch();
+		modelBatch = new ModelBatch(new BaseShaderProvider() {
+			@Override
+			protected Shader createShader (Renderable renderable) {
+				return new DiffuseTextureShader();
+			}
+		});
 		lights = new Lights();
 		lights.ambientLight.set(0.4f, 0.4f, 0.4f, 1f);
 		lights.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -0.8f, -0.2f));
@@ -99,8 +107,8 @@ public class Basic3DSceneTest implements ApplicationListener {
 		modelBatch.begin(cam);
 		for (ModelInstance instance : instances)
 			modelBatch.render(instance, lights);
-		if (space != null)
-			modelBatch.render(space);
+		//if (space != null)
+			//modelBatch.render(space);
 		modelBatch.end();
 	}
 
