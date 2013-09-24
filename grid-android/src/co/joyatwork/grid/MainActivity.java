@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 
+import co.joyatwork.grid.tests.Basic3DSceneTest;
 import co.joyatwork.grid.tests.DiffuseShaderTest;
 import co.joyatwork.grid.tests.DefaultShaderTest;
 import co.joyatwork.grid.tests.DiffuseTextureShaderTest;
@@ -41,10 +42,11 @@ public class MainActivity extends AndroidApplication {
         cfg.useGL20 = true;
         
         //TODO remove shader testing 
-        initialize(new GridGame(), cfg);
+        //initialize(new GridGame(), cfg);
         //initialize(new DefaultShaderTest(), cfg);
         //initialize(new DiffuseShaderTest(), cfg);
         //initialize(new DiffuseTextureShaderTest(), cfg);
+        initialize(new Basic3DSceneTest(), cfg);
 
         if (graphics.getView() instanceof SurfaceView) {
             SurfaceView glView = (SurfaceView) graphics.getView();
