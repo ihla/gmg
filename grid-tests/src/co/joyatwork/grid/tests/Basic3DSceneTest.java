@@ -39,7 +39,8 @@ public class Basic3DSceneTest implements ApplicationListener {
 		modelBatch = new ModelBatch(new BaseShaderProvider() {
 			@Override
 			protected Shader createShader (Renderable renderable) {
-				return new DiffuseTextureShader();
+				//return new DiffuseTextureShader();
+				return new DiffuseShader();
 			}
 		});
 		
