@@ -42,6 +42,7 @@ public class DiffuseShader extends BaseShader {
 	 * v_diffuseLight - diffuse light color intensity = dot(normal, lightDirection) * directionLightColor; 
 	 */
 	private final static String fragmentShader = 
+			"precision mediump float;\n"+
 			"varying vec3 v_diffuseLight;\n"+
 			"uniform vec3 u_ambientLight;\n"+
 			"uniform vec3 u_diffuseColor;\n"+
